@@ -1,0 +1,1 @@
+import{w as t}from"./with-props-BUZBlRyP.js";import{l as r}from"./chunk-KNED5TY2-DxLHhDWh.js";import{N as o}from"./NavigationMenu-BSNztIo_.js";import"./icon-button-D3WrrEDa.js";const a=()=>r.jsxs("div",{className:"min-h-screen bg-gray-100 p-8",children:[r.jsx("h1",{className:"text-4xl font-bold mb-4",children:"Contact Operator"}),r.jsx(o,{})]}),i=t(a);export{i as default};

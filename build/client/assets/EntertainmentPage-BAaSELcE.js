@@ -1,0 +1,1 @@
+import{w as n}from"./with-props-BUZBlRyP.js";import{l as t}from"./chunk-KNED5TY2-DxLHhDWh.js";import{N as e}from"./NavigationMenu-BSNztIo_.js";import"./icon-button-D3WrrEDa.js";const r=()=>t.jsxs("div",{className:"min-h-screen bg-gray-100 p-8",children:[t.jsx("h1",{className:"text-4xl font-bold mb-4",children:"Entertainment"}),t.jsx(e,{})]}),i=n(r);export{i as default};

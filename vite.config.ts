@@ -9,6 +9,17 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./app"),
+			app: path.resolve(__dirname, "./app"),
+		},
+	},
+	server: {
+		port: 8080,
+		proxy: {
+			"/api": {
+				target: "http://localhost:3000",
+				changeOrigin: true,
+				secure: false,
+			},
 		},
 	},
 });

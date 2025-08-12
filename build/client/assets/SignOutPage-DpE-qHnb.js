@@ -1,0 +1,1 @@
+import{w as s}from"./with-props-BUZBlRyP.js";import{l as t}from"./chunk-KNED5TY2-DxLHhDWh.js";import{N as o}from"./NavigationMenu-BSNztIo_.js";import"./icon-button-D3WrrEDa.js";const n=()=>t.jsxs("div",{className:"min-h-screen bg-gray-100 p-8",children:[t.jsx("h1",{className:"text-4xl font-bold mb-4",children:"Sign Out"}),t.jsx(o,{})]}),m=s(n);export{m as default};
