@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Thermometer, Power } from "lucide-react";
 import { Text } from "~/components/ui/text";
 import { useTuyaIRCommand } from "~/hooks/useTuyaIRCommand";
+import { DEVICE_IDS } from "~/services/tuyaIRService";
 import debounce from "lodash/debounce";
 
 interface ACWidgetProps {}
@@ -31,7 +32,28 @@ const ACWidget: React.FC<ACWidgetProps> = () => {
 
 	const bgPath = `M ${cx - radius} ${cy} A ${radius} ${radius} 0 0 1 ${cx + radius} ${cy}`;
 
-	const { mutate: sendCommand, isLoading } = useTuyaIRCommand();
+	const { acStatus, isLoadingStatus, sendCommand, isSendingCommand } = useTuyaIRCommand(
+		DEVICE_IDS.AC.remoteId,
+	);
+
+	// Sync widget with actual AC status
+	useEffect(() => {
+		if (acStatus) {
+			if (acStatus.temp) setLocalTemp(parseInt(acStatus.temp));
+			if (typeof acStatus.powerOpen === "boolean") setIsOn(acStatus.powerOpen);
+			if (acStatus.mode !== undefined) {
+				const modeMap: Record<string, string> = {
+					"0": "Auto",
+					"1": "Cool",
+					"2": "Dry",
+					"3": "Sleep",
+					"4": "ION",
+				};
+				setCurrentMode(modeMap[acStatus.mode] || currentMode);
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [acStatus?.temp, acStatus?.powerOpen, acStatus?.mode]);
 
 	// Debounced function to send temperature command
 	const debouncedSendTemp = useCallback(
@@ -51,20 +73,16 @@ const ACWidget: React.FC<ACWidgetProps> = () => {
 			key_id: 0,
 			key: isOn ? "PowerOff" : "PowerOn",
 		});
-		setIsOn(!isOn);
+		setIsOn((prev) => !prev);
 	};
 
 	const handleModeChange = (mode: string) => {
 		if (!isOn) return;
-		const modeMap: { [key: string]: string } = {
-			Auto: "M2",
-			Cool: "M0",
-			Dry: "M4",
-		};
+		const modeMap: { [key: string]: string } = { Auto: "M0", Cool: "M1", Dry: "M2" };
 
 		sendCommand({
 			category_id: 5,
-			key_id: 0,
+			key_id: 1,
 			key: modeMap[mode],
 		});
 		setCurrentMode(mode);
@@ -129,9 +147,10 @@ const ACWidget: React.FC<ACWidgetProps> = () => {
 				</div>
 				<button
 					onClick={handlePowerToggle}
+					disabled={isSendingCommand}
 					className={`p-2 rounded-full transition-colors ${
 						isOn ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"
-					}`}>
+					} ${isSendingCommand ? "opacity-50 cursor-not-allowed" : ""}`}>
 					<Power className="w-4 h-4" />
 				</button>
 			</div>

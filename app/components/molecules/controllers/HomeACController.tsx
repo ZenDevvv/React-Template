@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useTuyaIRCommand } from "../../../hooks/useTuyaIRCommand";
 import debounce from "lodash/debounce";
 
-const DEVICE_ID = "eb9f194920a4ae4b877qs9";
+const DEVICE_ID = "ebd03d60a10029efb4bryq";
 const MIN_TEMP = 16;
 const MAX_TEMP = 30;
 
@@ -53,7 +53,13 @@ export const HomeACController: React.FC = () => {
 			<div className="flex items-center justify-between mb-4">
 				<h3 className="text-lg font-semibold">Climate</h3>
 				<button
-					onClick={() => sendCommand({ category_id: 5, key_id: 2, key: "PWR" })}
+					onClick={() =>
+					sendCommand({
+						category_id: 5,
+						key_id: 0,
+						key: acStatus?.powerOpen ? "PowerOff" : "PowerOn",
+					})
+				}
 					className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
 						acStatus?.powerOpen
 							? "bg-green-100 text-green-600"
@@ -102,7 +108,7 @@ export const HomeACController: React.FC = () => {
 							? "bg-blue-500 text-white"
 							: "bg-blue-50 text-blue-600"
 					}`}
-					onClick={() => sendCommand({ category_id: 5, key_id: 1, key: "M1" })}
+					onClick={() => sendCommand({ category_id: 5, key_id: 0, key: "M1" })}
 					disabled={isSendingCommand}>
 					Cool
 				</button>
@@ -112,7 +118,7 @@ export const HomeACController: React.FC = () => {
 							? "bg-purple-500 text-white"
 							: "bg-purple-50 text-purple-600"
 					}`}
-					onClick={() => sendCommand({ category_id: 5, key_id: 1, key: "M3" })}
+					onClick={() => sendCommand({ category_id: 5, key_id: 0, key: "M3" })}
 					disabled={isSendingCommand}>
 					Sleep
 				</button>
@@ -122,7 +128,7 @@ export const HomeACController: React.FC = () => {
 							? "bg-green-500 text-white"
 							: "bg-green-50 text-green-600"
 					}`}
-					onClick={() => sendCommand({ category_id: 5, key_id: 1, key: "M4" })}
+					onClick={() => sendCommand({ category_id: 5, key_id: 0, key: "M4" })}
 					disabled={isSendingCommand}>
 					ION
 				</button>

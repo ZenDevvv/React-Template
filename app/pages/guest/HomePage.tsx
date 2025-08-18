@@ -1,8 +1,8 @@
 import React from "react";
-import DashboardLayout from "../../components/organisms/DashboardLayout";
+import HomeTemplate from "../../components/templates/HomeTemplate";
 
 export const HomePage: React.FC = () => {
-	return <DashboardLayout />;
+	return <HomeTemplate />;
 };
 
 export default HomePage;

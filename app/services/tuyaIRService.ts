@@ -29,9 +29,14 @@ export const tuyaIRService = {
 	},
 
 	getACStatus: async (deviceIds: string[]) => {
-		const { remoteId } = DEVICE_IDS.AC;
+		// Tuya API expects infrared device IDs, not remote IDs
 		const response = await axios.get(`${BASE_URL}/tuya-ir/ac/status/batch`, {
-			params: { device_ids: remoteId },
+			params: { device_ids: deviceIds.join(","), _ts: Date.now() },
+			headers: {
+				"Cache-Control": "no-store",
+				Pragma: "no-cache",
+				Expires: "0",
+			},
 		});
 		return response.data;
 	},

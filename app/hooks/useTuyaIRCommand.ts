@@ -29,7 +29,31 @@ export const useTuyaIRCommand = (deviceId: string) => {
 		queryKey: ["ac-status", deviceId],
 		queryFn: async () => {
 			const response = await tuyaIRService.getACStatus([deviceId]);
-			return response.result[0];
+			const raw = response?.result?.[0] ?? {};
+			const coerceBool = (v: unknown): boolean => {
+				if (typeof v === "boolean") return v;
+				if (typeof v === "number") return v !== 0;
+				if (typeof v === "string")
+					return ["1", "true", "on", "yes"].includes(v.toLowerCase());
+				return false;
+			};
+			const powerCandidates = [
+				raw.powerOpen,
+				raw.power_open,
+				raw.powerOn,
+				raw.power_on,
+				raw.power,
+			];
+			const firstDefined = powerCandidates.find((v) => v !== undefined);
+			const mapped: ACStatus = {
+				devId: raw.devId || raw.device_id || deviceId,
+				powerOpen: coerceBool(firstDefined),
+				mode: String(raw.mode ?? raw.work_mode ?? raw.workMode ?? ""),
+				temp: String(raw.temp ?? raw.temperature ?? ""),
+				fan: String(raw.fan ?? raw.wind ?? raw.fan_speed ?? ""),
+				swing: String(raw.swing ?? raw.swing_mode ?? ""),
+			};
+			return mapped;
 		},
 		refetchOnWindowFocus: true,
 		refetchInterval: undefined,
