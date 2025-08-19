@@ -1,13 +1,10 @@
 import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar, Clock, MapPin, Users, Star } from "lucide-react";
 import { Card } from "../ui/card";
 import { Image } from "../ui/image";
 import { Text } from "../ui/text";
 import { Button } from "../ui/button";
-import ACWidget from "./ACWidget";
-import MusicPlayer from "../molecules/MusicPlayer";
-import ControlButtons from "../molecules/ControlButtons";
-import EventCard from "../molecules/EventCard";
+import { ACWidget, MusicPlayer, ControlButtons, EventCard } from "../molecules";
 
 export const HomeMain: React.FC = () => {
 	return (

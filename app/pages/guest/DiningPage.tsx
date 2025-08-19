@@ -1,24 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Search, ShoppingBag, Plus, Minus, Star, Clock, Leaf } from "lucide-react";
-import { truncateText } from "../../lib/utils";
+import { DiningOrganism } from "../../components/organisms";
+import { GuestPageTemplate } from "../../components/templates";
+import type { MenuItem } from "../../types/cards";
 
 type Category = {
 	id: string;
 	icon: React.ReactNode;
 	label: string;
-};
-
-type MenuItem = {
-	id: string;
-	name: string;
-	price: number;
-	description: string;
-	image: string;
-	category: string;
-	rating: number;
-	prepTime: string;
-	isVegan?: boolean;
-	isPopular?: boolean;
 };
 
 const categories: Category[] = [
@@ -92,6 +80,60 @@ const items: MenuItem[] = [
 		isVegan: true,
 	},
 	{
+		id: "caesar-salad",
+		name: "Caesar Salad",
+		price: 12,
+		description:
+			"Romaine Lettuce • Parmesan Cheese • Croutons • Caesar Dressing • Black Pepper",
+		image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1792&auto=format&fit=crop",
+		category: "salads",
+		rating: 4.3,
+		prepTime: "5-8 min",
+	},
+	{
+		id: "greek-salad",
+		name: "Greek Salad",
+		price: 13,
+		description: "Mixed Greens • Feta Cheese • Olives • Cucumber • Red Onion • Greek Dressing",
+		image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1792&auto=format&fit=crop",
+		category: "salads",
+		rating: 4.6,
+		prepTime: "5-10 min",
+		isVegan: true,
+	},
+	{
+		id: "grilled-salmon",
+		name: "Grilled Salmon",
+		price: 28,
+		description: "Fresh Atlantic Salmon • Lemon Butter Sauce • Asparagus • Wild Rice • Herbs",
+		image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1796&auto=format&fit=crop",
+		category: "mains",
+		rating: 4.8,
+		prepTime: "20-25 min",
+		isPopular: true,
+	},
+	{
+		id: "beef-steak",
+		name: "Beef Tenderloin",
+		price: 32,
+		description:
+			"Premium Beef Tenderloin • Red Wine Reduction • Mashed Potatoes • Seasonal Vegetables",
+		image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1792&auto=format&fit=crop",
+		category: "mains",
+		rating: 4.9,
+		prepTime: "25-30 min",
+	},
+	{
+		id: "chicken-breast",
+		name: "Herb Roasted Chicken",
+		price: 22,
+		description: "Free-Range Chicken Breast • Rosemary • Thyme • Garlic • Roasted Vegetables",
+		image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1796&auto=format&fit=crop",
+		category: "mains",
+		rating: 4.4,
+		prepTime: "18-22 min",
+	},
+	{
 		id: "truffle-pasta",
 		name: "Truffle Pasta",
 		price: 24,
@@ -100,6 +142,27 @@ const items: MenuItem[] = [
 		category: "pasta",
 		rating: 4.7,
 		prepTime: "18-25 min",
+	},
+	{
+		id: "carbonara",
+		name: "Carbonara",
+		price: 20,
+		description: "Spaghetti • Pancetta • Eggs • Parmesan • Black Pepper • Fresh Parsley",
+		image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1792&auto=format&fit=crop",
+		category: "pasta",
+		rating: 4.5,
+		prepTime: "15-20 min",
+	},
+	{
+		id: "pesto-pasta",
+		name: "Pesto Pasta",
+		price: 18,
+		description: "Fettuccine • Fresh Basil Pesto • Pine Nuts • Parmesan • Cherry Tomatoes",
+		image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1796&auto=format&fit=crop",
+		category: "pasta",
+		rating: 4.3,
+		prepTime: "12-18 min",
+		isVegan: true,
 	},
 	{
 		id: "classic-burger",
@@ -112,6 +175,89 @@ const items: MenuItem[] = [
 		rating: 4.4,
 		prepTime: "12-18 min",
 		isPopular: true,
+	},
+	{
+		id: "cheese-burger",
+		name: "Cheese Burger",
+		price: 19,
+		description:
+			"Angus Beef Patty • Cheddar Cheese • Lettuce • Tomato • Onion • Special Sauce • Brioche Bun",
+		image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1792&auto=format&fit=crop",
+		category: "burgers",
+		rating: 4.6,
+		prepTime: "12-18 min",
+	},
+	{
+		id: "veggie-burger",
+		name: "Veggie Burger",
+		price: 16,
+		description: "Plant-Based Patty • Lettuce • Tomato • Avocado • Vegan Cheese • Brioche Bun",
+		image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1796&auto=format&fit=crop",
+		category: "burgers",
+		rating: 4.2,
+		prepTime: "10-15 min",
+		isVegan: true,
+	},
+	{
+		id: "chocolate-cake",
+		name: "Chocolate Cake",
+		price: 8,
+		description: "Rich Chocolate Cake • Chocolate Ganache • Fresh Berries • Vanilla Ice Cream",
+		image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1792&auto=format&fit=crop",
+		category: "desserts",
+		rating: 4.8,
+		prepTime: "5-8 min",
+	},
+	{
+		id: "tiramisu",
+		name: "Tiramisu",
+		price: 9,
+		description:
+			"Classic Italian Dessert • Coffee-Soaked Ladyfingers • Mascarpone Cream • Cocoa Powder",
+		image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1796&auto=format&fit=crop",
+		category: "desserts",
+		rating: 4.9,
+		prepTime: "5-8 min",
+	},
+	{
+		id: "ice-cream",
+		name: "Artisan Ice Cream",
+		price: 6,
+		description: "Handcrafted Ice Cream • Vanilla Bean • Fresh Strawberries • Chocolate Chips",
+		image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1792&auto=format&fit=crop",
+		category: "desserts",
+		rating: 4.5,
+		prepTime: "3-5 min",
+	},
+	{
+		id: "fresh-juice",
+		name: "Fresh Orange Juice",
+		price: 4,
+		description: "Freshly Squeezed Orange Juice • No Added Sugar • Vitamin C Rich • Chilled",
+		image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1792&auto=format&fit=crop",
+		category: "drinks",
+		rating: 4.7,
+		prepTime: "2-3 min",
+	},
+	{
+		id: "smoothie",
+		name: "Berry Smoothie",
+		price: 5,
+		description: "Mixed Berries • Banana • Greek Yogurt • Honey • Almond Milk • Ice",
+		image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1796&auto=format&fit=crop",
+		category: "drinks",
+		rating: 4.4,
+		prepTime: "3-5 min",
+	},
+	{
+		id: "coffee",
+		name: "Artisan Coffee",
+		price: 3,
+		description: "Premium Coffee Beans • Freshly Ground • Hot or Iced • Cream Available",
+		image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1792&auto=format&fit=crop",
+		category: "drinks",
+		rating: 4.6,
+		prepTime: "2-4 min",
 	},
 ];
 
@@ -129,14 +275,17 @@ export const DiningPage: React.FC = () => {
 	}, []);
 
 	const filteredItems = useMemo(() => {
-		return items.filter((item) => {
+		console.log("Filtering items for category:", selectedCategory);
+		const filtered = items.filter((item) => {
 			const matchesCategory = item.category === selectedCategory;
 			const matchesSearch =
 				item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				item.description.toLowerCase().includes(searchQuery.toLowerCase());
 			return matchesCategory && matchesSearch;
 		});
-	}, [selectedCategory, searchQuery]);
+		console.log("Filtered items count:", filtered.length);
+		return filtered;
+	}, [selectedCategory, searchQuery, items]);
 
 	const add = (id: string) => {
 		setCart((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
@@ -200,197 +349,30 @@ export const DiningPage: React.FC = () => {
 			localStorage.setItem("cart_v1", JSON.stringify(detailed));
 		} catch {}
 	}, [cartItems, cart]);
+	const handleCategoryChange = (category: string) => {
+		console.log("Changing category from", selectedCategory, "to", category);
+		setSelectedCategory(category);
+	};
+
+	// Debug effect to track category changes
+	useEffect(() => {
+		console.log("Category changed to:", selectedCategory);
+	}, [selectedCategory]);
+
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
-			<div className="flex">
-				{/* Sidebar */}
-				<aside className="w-80 min-h-screen bg-white border-r border-slate-200 shadow-xl flex flex-col">
-					<div className="p-8 border-b border-slate-100 flex-shrink-0">
-						<h2 className="text-2xl font-bold text-slate-900 mb-2">Menu Categories</h2>
-						<p className="text-slate-600">Discover our delicious offerings</p>
-					</div>
-
-					<nav className="flex-1 overflow-y-auto p-6">
-						{categories.map((category) => (
-							<button
-								key={category.id}
-								onClick={() => setSelectedCategory(category.id)}
-								className={`w-full px-6 py-4 mb-2 rounded-2xl text-left transition-all duration-300 hover:bg-slate-50 hover:scale-105 ${
-									selectedCategory === category.id
-										? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
-										: "text-slate-700 hover:text-slate-900"
-								}`}>
-								<span className="font-medium">{category.label}</span>
-							</button>
-						))}
-					</nav>
-				</aside>
-
-				{/* Main Content */}
-				<main className="flex-1 p-8 overflow-y-auto min-h-screen">
-					{/* Header */}
-					<header className="flex items-center justify-between mb-8">
-						<div>
-							<h1 className="text-4xl font-bold text-slate-900 mb-2">
-								{categories.find((c) => c.id === selectedCategory)?.label}
-							</h1>
-							<p className="text-slate-600">Fresh, delicious, and made with love</p>
-						</div>
-
-						{/* Search and Cart Summary */}
-						<div className="flex items-center space-x-6">
-							<div className="relative">
-								<input
-									type="text"
-									placeholder="Search dishes..."
-									value={searchQuery}
-									onChange={(e) => setSearchQuery(e.target.value)}
-									className="pl-12 pr-6 py-3 w-80 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
-								/>
-								<Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-							</div>
-
-							{/* Order Status Button */}
-							<a
-								href="/order-status"
-								className="bg-white rounded-2xl shadow-lg p-4 border border-slate-200 hover:shadow-xl transition-all duration-300 relative group">
-								<Clock className="w-6 h-6 text-slate-700 group-hover:text-emerald-600 transition-colors" />
-								{/* Tooltip */}
-								<div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-slate-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-									Order Status
-									<div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-900"></div>
-								</div>
-							</a>
-
-							{/* Cart Button */}
-							<a
-								href="/cart"
-								className="bg-white rounded-2xl shadow-lg p-4 border border-slate-200 hover:shadow-xl transition-all duration-300 relative group">
-								<div className="relative">
-									<ShoppingBag className="w-6 h-6 text-slate-700 group-hover:text-emerald-600 transition-colors" />
-									{totalItems > 0 && (
-										<span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
-											{totalItems}
-										</span>
-									)}
-								</div>
-								{/* Tooltip */}
-								<div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-slate-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-									Cart ({totalItems} items)
-									<div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-900"></div>
-								</div>
-							</a>
-						</div>
-					</header>
-
-					{/* Food Grid */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-						{filteredItems.map((item) => {
-							const cartItem = cart[item.id];
-
-							return (
-								<div
-									key={item.id}
-									className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-100 flex flex-col h-full">
-									<div className="relative">
-										<img
-											src={item.image}
-											alt={item.name}
-											className="w-full h-56 object-cover"
-										/>
-										<div className="absolute top-4 right-4 flex space-x-2">
-											{item.isPopular && (
-												<span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-													Popular
-												</span>
-											)}
-											{item.isVegan && (
-												<span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
-													<Leaf className="w-3 h-3 mr-1" />
-													Vegan
-												</span>
-											)}
-										</div>
-									</div>
-
-									<div className="p-6 flex-1 flex flex-col">
-										<div className="flex items-start justify-between mb-3">
-											<h3 className="text-xl font-bold text-slate-900">
-												{item.name}
-											</h3>
-											<span className="text-2xl font-bold text-emerald-600">
-												${item.price}
-											</span>
-										</div>
-
-										<div className="flex items-center space-x-4 mb-4">
-											<div className="flex items-center space-x-1">
-												<Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-												<span className="text-sm font-medium text-slate-700">
-													{item.rating}
-												</span>
-											</div>
-											<div className="flex items-center space-x-1">
-												<Clock className="w-4 h-4 text-slate-500" />
-												<span className="text-sm text-slate-600">
-													{item.prepTime}
-												</span>
-											</div>
-										</div>
-
-										<p className="text-slate-600 text-sm mb-6 leading-relaxed h-12 overflow-hidden">
-											{truncateText(item.description, 85)}
-										</p>
-
-										{cartItem ? (
-											<div className="flex items-center justify-between mt-auto">
-												<div className="flex items-center space-x-3 bg-slate-100 rounded-2xl p-2">
-													<button
-														onClick={() => sub(item.id)}
-														className="w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 transform active:scale-95">
-														<Minus className="w-4 h-4" />
-													</button>
-													<span className="w-8 text-center font-medium">
-														{cartItem}
-													</span>
-													<button
-														onClick={() => add(item.id)}
-														className="w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 transform active:scale-95">
-														<Plus className="w-4 h-4" />
-													</button>
-												</div>
-												<span className="font-bold text-emerald-600">
-													${(item.price * cartItem).toFixed(2)}
-												</span>
-											</div>
-										) : (
-											<button
-												onClick={() => add(item.id)}
-												className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-2xl font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 transform active:scale-95 mt-auto">
-												<Plus className="w-4 h-4" />
-												<span>Add to Cart</span>
-											</button>
-										)}
-									</div>
-								</div>
-							);
-						})}
-					</div>
-
-					{filteredItems.length === 0 && (
-						<div className="text-center py-16">
-							<div className="text-6xl mb-4">🔍</div>
-							<h3 className="text-2xl font-bold text-slate-900 mb-2">
-								No items found
-							</h3>
-							<p className="text-slate-600">
-								Try adjusting your search or browse other categories
-							</p>
-						</div>
-					)}
-				</main>
-			</div>
-		</div>
+		<GuestPageTemplate>
+			<DiningOrganism
+				items={items}
+				cart={cart}
+				selectedCategory={selectedCategory}
+				searchQuery={searchQuery}
+				onAddToCart={add}
+				onRemoveFromCart={sub}
+				onCategoryChange={handleCategoryChange}
+				onSearchChange={setSearchQuery}
+				totalItems={totalItems}
+			/>
+		</GuestPageTemplate>
 	);
 };
 

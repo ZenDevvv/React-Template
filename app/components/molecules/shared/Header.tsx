@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { User, Settings, ChevronDown, LogOut, Bell, HelpCircle } from "lucide-react";
-import { Text } from "../ui/text";
-import { IconButton } from "../ui/icon-button";
+import { Text } from "../../ui/text";
+import { IconButton } from "../../ui/icon-button";
 
 export const Header: React.FC = () => {
 	const currentTime = new Date();
 	const [showDropdown, setShowDropdown] = useState(false);
 
 	return (
-		<header className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 lg:py-5 bg-gradient-to-r from-white to-gray-50 shadow-sm border-b border-gray-100">
+		<header className="relative z-[60] flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 lg:py-5 bg-gradient-to-r from-white to-gray-50 shadow-sm border-b border-gray-100">
 			{/* Logo */}
 			<div className="flex flex-col">
 				<Text as="h1" size="xl" weight="bold" className="text-blue-900 tracking-tight">
@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
 
 					{/* Dropdown Menu */}
 					{showDropdown && (
-						<div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+						<div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-[70]">
 							<div className="px-4 py-3 border-b border-gray-100">
 								<Text as="p" size="sm" weight="semibold" className="text-gray-900">
 									John Doe

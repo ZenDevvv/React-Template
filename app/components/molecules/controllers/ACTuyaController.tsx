@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useTuyaIRCommand } from "../../../hooks/useTuyaIRCommand";
 import debounce from "lodash/debounce";
 import * as Icons from "lucide-react";
@@ -55,6 +55,13 @@ export const ACTuyaController: React.FC = () => {
 		[sendCommand],
 	);
 
+	// Cancel pending debounce on unmount
+	useEffect(() => {
+		return () => {
+			(debouncedSendTemp as any).cancel?.();
+		};
+	}, [debouncedSendTemp]);
+
 	const handleTempChange = (increment: boolean) => {
 		if (!acStatus) return;
 
@@ -99,7 +106,8 @@ export const ACTuyaController: React.FC = () => {
 						acStatus?.powerOpen
 							? "bg-green-100 text-green-600"
 							: "bg-gray-100 text-gray-400"
-					} ${isSendingCommand ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}>
+					}
+					${isSendingCommand ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}>
 					<Icons.Power className="w-4 h-4" />
 				</button>
 			</div>
@@ -144,7 +152,8 @@ export const ACTuyaController: React.FC = () => {
 							acStatus?.mode === mode.id
 								? "bg-blue-100 text-blue-600"
 								: "bg-white border border-gray-200 text-gray-700"
-						} ${isSendingCommand ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"}`}>
+						}
+						${isSendingCommand ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"}`}>
 						{mode.icon}
 						<span className="text-xs font-medium">{mode.name}</span>
 					</button>
@@ -163,7 +172,8 @@ export const ACTuyaController: React.FC = () => {
 						acStatus?.powerOpen
 							? "bg-green-100 text-green-600"
 							: "bg-white border border-gray-200 text-gray-700"
-					} ${isSendingCommand ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"}`}>
+					}
+					${isSendingCommand ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"}`}>
 					<Icons.Power className="w-4 h-4" />
 					<span className="text-xs font-medium">Power</span>
 				</button>

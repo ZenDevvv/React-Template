@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { Clock, Play, Share2, Volume2, MoreHorizontal } from "lucide-react";
-import { truncateText } from "../../lib/utils";
+import { EntertainmentOrganism } from "../../components/organisms";
+import { GuestPageTemplate } from "../../components/templates";
+import type { Video } from "../../types/cards";
 
 // Custom CSS for hiding scrollbars
 const scrollbarHideStyles = `
@@ -12,17 +14,6 @@ const scrollbarHideStyles = `
 		display: none;
 	}
 `;
-
-interface Video {
-	id: string;
-	title: string;
-	subtitle: string;
-	duration: string;
-	category: string;
-	thumbnail: string;
-	youtubeId: string;
-	isLive?: boolean;
-}
 
 export const EntertainmentPage: React.FC = () => {
 	const videos: Video[] = useMemo(
@@ -92,6 +83,7 @@ export const EntertainmentPage: React.FC = () => {
 			title: "Music Studio Production",
 			subtitle: "Behind the Scenes",
 			duration: "2:45:30",
+			category: "Music",
 			thumbnail: "https://img.youtube.com/vi/kXYiU_JCYtU/mqdefault.jpg",
 			youtubeId: "kXYiU_JCYtU",
 		},
@@ -100,6 +92,7 @@ export const EntertainmentPage: React.FC = () => {
 			title: "Ocean Waves for Sleep",
 			subtitle: "Relaxing Ocean Sounds",
 			duration: "8:00:00",
+			category: "Ambient",
 			thumbnail: "https://img.youtube.com/vi/1ZYbU82GVz4/mqdefault.jpg",
 			youtubeId: "1ZYbU82GVz4",
 		},
@@ -108,6 +101,7 @@ export const EntertainmentPage: React.FC = () => {
 			title: "Mountain Retreat Experience",
 			subtitle: "Nature Documentary",
 			duration: "1:15:45",
+			category: "Travel",
 			thumbnail: "https://img.youtube.com/vi/Dx5qFachd3A/mqdefault.jpg",
 			youtubeId: "Dx5qFachd3A",
 		},
@@ -116,6 +110,7 @@ export const EntertainmentPage: React.FC = () => {
 			title: "City Lights Time Lapse",
 			subtitle: "Urban Beauty",
 			duration: "12:30",
+			category: "Travel",
 			thumbnail: "https://img.youtube.com/vi/L_LUpnjgP-s/mqdefault.jpg",
 			youtubeId: "L_LUpnjgP-s",
 		},
@@ -126,155 +121,14 @@ export const EntertainmentPage: React.FC = () => {
 	const categories = ["All", "Jazz", "Travel", "Ambient", "Culinary"];
 
 	return (
-		<div className="min-h-screen bg-white">
-			<div className="flex h-screen">
-				{/* Left Sidebar */}
-				<div className="w-80 bg-gray-50 border-r border-gray-200 p-6">
-					<div className="mb-6">
-						<h2 className="flex items-center space-x-2 text-lg font-semibold text-gray-900 mb-4">
-							<Clock className="w-5 h-5 text-gray-600" />
-							<span>Available Videos</span>
-						</h2>
-
-						{/* Category Filter */}
-						<div className="flex flex-wrap gap-2 mb-4">
-							{categories.map((category) => (
-								<button
-									key={category}
-									className="px-3 py-1 text-xs font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-full transition-colors">
-									{category}
-								</button>
-							))}
-						</div>
-					</div>
-
-					<div className="space-y-3">
-						{videos.map((video) => (
-							<div
-								key={video.id}
-								onClick={() => setSelectedVideo(video)}
-								className={`group cursor-pointer rounded-lg p-3 transition-all duration-200 ${
-									selectedVideo.id === video.id
-										? "bg-blue-100 border border-blue-300"
-										: "hover:bg-gray-100 border border-transparent"
-								}`}>
-								<div className="flex items-start space-x-3">
-									<div className="relative flex-shrink-0">
-										<img
-											src={video.thumbnail}
-											alt={video.title}
-											className="w-16 h-12 object-cover rounded-md"
-										/>
-										{video.isLive && (
-											<div className="absolute -top-1 -left-1 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
-												LIVE
-											</div>
-										)}
-										<div className="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-1 py-0.5 rounded">
-											{video.duration}
-										</div>
-									</div>
-
-									<div className="flex-1 min-w-0">
-										<h3 className="font-medium text-gray-900 text-sm line-clamp-2 mb-1">
-											{video.title}
-										</h3>
-										<p className="text-xs text-gray-600 mb-1">
-											{video.subtitle}
-										</p>
-										<div className="flex items-center justify-between">
-											<span className="text-xs text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">
-												{video.category}
-											</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
-
-				{/* Main Content */}
-				<div className="flex-1 p-6">
-					{/* Video Player */}
-					<div className="bg-black rounded-xl overflow-hidden shadow-2xl mb-8">
-						<div className="relative aspect-video">
-							<iframe
-								src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1&rel=0&modestbranding=1&showinfo=0`}
-								title={selectedVideo.title}
-								className="w-full h-full"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-								allowFullScreen
-							/>
-						</div>
-
-						{/* Video Info Below Player */}
-						<div className="p-6 bg-white">
-							<div className="flex items-start justify-between">
-								<div>
-									<h1 className="text-2xl font-bold text-gray-900 mb-2">
-										{selectedVideo.title}
-									</h1>
-									<p className="text-gray-600 mb-3">{selectedVideo.subtitle}</p>
-								</div>
-
-								<div className="flex items-center space-x-4">
-									<button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 transition-colors">
-										<Play className="w-4 h-4" />
-										<span>Play</span>
-									</button>
-									<button className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-3 rounded-lg transition-colors">
-										<Share2 className="w-4 h-4" />
-									</button>
-									<button className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-3 rounded-lg transition-colors">
-										<Volume2 className="w-4 h-4" />
-									</button>
-									<button className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-3 rounded-lg transition-colors">
-										<MoreHorizontal className="w-4 h-4" />
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					{/* More Videos */}
-					<div>
-						<h2 className="text-xl font-bold text-gray-900 mb-6">More Videos</h2>
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-							{moreVideos.map((video) => (
-								<div
-									key={video.id}
-									onClick={() => setSelectedVideo(video)}
-									className="group cursor-pointer bg-white border border-gray-200 rounded-xl overflow-hidden hover:bg-gray-50 transition-all duration-300 hover:scale-105 shadow-sm">
-									<div className="relative">
-										<img
-											src={video.thumbnail}
-											alt={video.title}
-											className="w-full aspect-video object-cover"
-										/>
-										<div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-											{video.duration}
-										</div>
-										<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-											<div className="bg-white/20 backdrop-blur-sm p-3 rounded-full">
-												<Play className="w-6 h-6 text-white" />
-											</div>
-										</div>
-									</div>
-
-									<div className="p-4">
-										<h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">
-											{video.title}
-										</h3>
-										<p className="text-xs text-gray-600">{video.subtitle}</p>
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<GuestPageTemplate>
+			<EntertainmentOrganism
+				videos={videos}
+				moreVideos={moreVideos}
+				selectedVideo={selectedVideo}
+				onVideoSelect={setSelectedVideo}
+			/>
+		</GuestPageTemplate>
 	);
 };
 

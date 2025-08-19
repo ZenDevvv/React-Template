@@ -1,6 +1,6 @@
 import type { Route } from "./+types/landing";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs = {} as Route.MetaArgs) {
 	return [
 		{ title: "React App Template" },
 		{

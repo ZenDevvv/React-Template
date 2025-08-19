@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { tuyaIRService } from "../services/tuyaIRService";
+import React from "react";
 
 interface TuyaIRCommandParams {
 	category_id: number;
@@ -24,6 +25,7 @@ interface APIResponse {
 
 export const useTuyaIRCommand = (deviceId: string) => {
 	const queryClient = useQueryClient();
+	let disposed = false;
 
 	const { data: acStatus, isLoading: isLoadingStatus } = useQuery<ACStatus, Error>({
 		queryKey: ["ac-status", deviceId],
@@ -55,7 +57,7 @@ export const useTuyaIRCommand = (deviceId: string) => {
 			};
 			return mapped;
 		},
-		refetchOnWindowFocus: true,
+		refetchOnWindowFocus: false,
 		refetchInterval: undefined,
 		retry: false,
 	});
@@ -63,11 +65,22 @@ export const useTuyaIRCommand = (deviceId: string) => {
 	const { mutate: sendCommand, isPending: isSendingCommand } = useMutation({
 		mutationFn: (params: TuyaIRCommandParams) => tuyaIRService.sendCommand(params),
 		onSuccess: () => {
-			setTimeout(() => {
+			if (!disposed) {
 				queryClient.invalidateQueries({ queryKey: ["ac-status", deviceId] });
-			}, 1000);
+			}
 		},
 	});
+
+	// Mark disposed on unmount so onSuccess/async work won’t run
+	// Note: this local flag is safe since the hook instance unmounts with the page
+	// and react-query itself avoids updating unmounted components.
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	React.useEffect(
+		() => () => {
+			disposed = true;
+		},
+		[],
+	);
 
 	return {
 		acStatus,

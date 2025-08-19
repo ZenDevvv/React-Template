@@ -1,5 +1,5 @@
 import React from "react";
-import NavigationMenu from "../../components/molecules/NavigationMenu";
+import NavigationMenu from "../../components/molecules/shared/NavigationMenu";
 
 export const SignOutPage: React.FC = () => {
 	return (

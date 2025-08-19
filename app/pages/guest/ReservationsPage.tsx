@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from "react";
-import { Search, Calendar, Clock, Users, Star, MapPin, Phone, Mail, X, Check } from "lucide-react";
+import { Calendar, Clock, Users, Star, MapPin, Phone, Mail, X, Check } from "lucide-react";
+import { ReservationsOrganism } from "../../components/organisms";
+import { GuestPageTemplate } from "../../components/templates";
 
 type ReservationType = {
 	id: string;
@@ -274,20 +276,6 @@ export const ReservationsPage: React.FC = () => {
 		specialRequests: "",
 	});
 
-	const filteredReservations = useMemo(() => {
-		return mockReservations.filter((reservation) => {
-			const matchesCategory =
-				selectedCategory === "all" || reservation.category === selectedCategory;
-			const matchesSearch =
-				reservation.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				reservation.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				reservation.features.some((feature) =>
-					feature.toLowerCase().includes(searchQuery.toLowerCase()),
-				);
-			return matchesCategory && matchesSearch;
-		});
-	}, [selectedCategory, searchQuery]);
-
 	const openModal = (reservation: ReservationType) => {
 		setSelectedReservation(reservation);
 		setIsModalOpen(true);
@@ -322,222 +310,42 @@ export const ReservationsPage: React.FC = () => {
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
-			<div className="flex">
-				{/* Sidebar */}
-				<aside className="w-80 min-h-screen bg-white border-r border-slate-200 shadow-xl flex flex-col">
-					<div className="p-8 border-b border-slate-100 flex-shrink-0">
-						<h2 className="text-2xl font-bold text-slate-900 mb-2">
-							Reservation Categories
-						</h2>
-						<p className="text-slate-600">Discover our exclusive venues and services</p>
-					</div>
+		<GuestPageTemplate>
+			<ReservationsOrganism
+				reservations={mockReservations}
+				selectedCategory={selectedCategory}
+				searchQuery={searchQuery}
+				onCategoryChange={setSelectedCategory}
+				onSearchChange={setSearchQuery}
+				onReserve={openModal}
+			/>
 
-					<nav className="flex-1 overflow-y-auto p-6">
-						{categories.map((category) => (
-							<button
-								key={category.id}
-								onClick={() => setSelectedCategory(category.id)}
-								className={`w-full px-6 py-4 mb-2 rounded-2xl text-left transition-all duration-300 hover:bg-slate-50 hover:scale-105 ${
-									selectedCategory === category.id
-										? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
-										: "text-slate-700 hover:text-slate-900"
-								}`}>
-								<span className="font-medium">{category.name}</span>
-							</button>
-						))}
-					</nav>
-				</aside>
-
-				{/* Main Content */}
-				<main className="flex-1 p-8 overflow-y-auto min-h-screen">
-					{/* Header */}
-					<header className="flex items-center justify-between mb-8">
-						<div>
-							<h1 className="text-4xl font-bold text-slate-900 mb-2">
-								{categories.find((c) => c.id === selectedCategory)?.name ||
-									"All Reservations"}
-							</h1>
-							<p className="text-slate-600">Exceptional experiences await you</p>
-						</div>
-
-						{/* Search */}
-						<div className="flex items-center space-x-6">
-							<div className="relative">
-								<input
-									type="text"
-									placeholder="Search venues..."
-									value={searchQuery}
-									onChange={(e) => setSearchQuery(e.target.value)}
-									className="pl-12 pr-6 py-3 w-80 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
-								/>
-								<Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-							</div>
-						</div>
-					</header>
-
-					{/* Reservations Grid */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-						{filteredReservations.map((reservation) => (
-							<div
-								key={reservation.id}
-								className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-100 flex flex-col h-full">
-								<div className="relative">
-									<img
-										src={reservation.image}
-										alt={reservation.name}
-										className="w-full h-56 object-cover"
-									/>
-									<div className="absolute top-4 right-4 flex space-x-2">
-										{reservation.isPopular && (
-											<span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-												Popular
-											</span>
-										)}
-										{reservation.isPremium && (
-											<span className="bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-												Premium
-											</span>
-										)}
-									</div>
-								</div>
-
-								<div className="p-6 flex-1 flex flex-col">
-									<div className="flex items-start justify-between mb-3">
-										<h3 className="text-xl font-bold text-slate-900">
-											{reservation.name}
-										</h3>
-										<span className="text-lg font-bold text-emerald-600">
-											{reservation.priceRange}
-										</span>
-									</div>
-
-									<div className="flex items-center space-x-4 mb-4">
-										<div className="flex items-center space-x-1">
-											<Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-											<span className="text-sm font-medium text-slate-700">
-												{reservation.rating}
-											</span>
-											<span className="text-sm text-slate-500">
-												({reservation.reviewCount})
-											</span>
-										</div>
-										<div className="flex items-center space-x-1">
-											<Users className="w-4 h-4 text-slate-500" />
-											<span className="text-sm text-slate-600">
-												{reservation.capacity.min}-
-												{reservation.capacity.max} guests
-											</span>
-										</div>
-									</div>
-
-									<div className="flex items-center space-x-1 mb-4">
-										<MapPin className="w-4 h-4 text-slate-500" />
-										<span className="text-sm text-slate-600">
-											{reservation.location}
-										</span>
-									</div>
-
-									<p className="text-slate-600 text-sm mb-4 leading-relaxed h-12 overflow-hidden">
-										{reservation.description}
-									</p>
-
-									<div className="mb-6">
-										<p className="text-sm font-medium text-slate-700 mb-2">
-											Features
-										</p>
-										<div className="flex flex-wrap gap-2">
-											{reservation.features
-												.slice(0, 3)
-												.map((feature, index) => (
-													<span
-														key={index}
-														className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-lg">
-														{feature}
-													</span>
-												))}
-											{reservation.features.length > 3 && (
-												<span className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-lg">
-													+{reservation.features.length - 3} more
-												</span>
-											)}
-										</div>
-									</div>
-
-									<div className="mb-6">
-										<p className="text-sm font-medium text-slate-700 mb-2">
-											Available Times
-										</p>
-										<div className="flex flex-wrap gap-2">
-											{reservation.availableTimes
-												.slice(0, 4)
-												.map((time, index) => (
-													<span
-														key={index}
-														className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs rounded-full border border-emerald-200">
-														{time}
-													</span>
-												))}
-											{reservation.availableTimes.length > 4 && (
-												<span className="px-3 py-1 bg-slate-100 text-slate-600 text-xs rounded-full">
-													+{reservation.availableTimes.length - 4} more
-												</span>
-											)}
-										</div>
-									</div>
-
-									<button
-										onClick={() => openModal(reservation)}
-										className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-2xl font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 transform active:scale-95 mt-auto">
-										<Calendar className="w-4 h-4" />
-										<span>Reserve Now</span>
-									</button>
-								</div>
-							</div>
-						))}
-					</div>
-
-					{filteredReservations.length === 0 && (
-						<div className="text-center py-16">
-							<div className="text-6xl mb-4">🔍</div>
-							<h3 className="text-2xl font-bold text-slate-900 mb-2">
-								No venues found
-							</h3>
-							<p className="text-slate-600">
-								Try adjusting your search or browse other categories
-							</p>
-						</div>
-					)}
-				</main>
-			</div>
-
-			{/* Elegant Reservation Modal - Similar to provided design */}
+			{/* Modern Reservation Modal */}
 			{isModalOpen && selectedReservation && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-					<div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-						<div className="grid grid-cols-1 lg:grid-cols-5 h-full">
+				<div
+					className="fixed inset-0 backdrop-blur-xl flex items-center justify-center p-2 sm:p-3 md:p-4 z-[9999]"
+					onClick={closeModal}>
+					<div
+						className="bg-white/95 backdrop-blur-2xl rounded-2xl md:rounded-3xl max-w-4xl md:max-w-5xl w-full max-h-[90vh] md:max-h-[95vh] overflow-hidden border-2 border-gray-200/50"
+						onClick={(e) => e.stopPropagation()}>
+						<div className="grid grid-cols-1 md:grid-cols-2 h-full">
 							{/* Left side - Form */}
-							<div className="lg:col-span-3 p-8 overflow-y-auto">
-								<div className="flex items-start justify-between mb-6">
+							<div className="p-4 sm:p-6 md:p-8 lg:p-10 overflow-y-auto pb-6 md:pb-8">
+								<div className="mb-6 md:mb-8">
 									<div>
-										<h2 className="text-2xl font-bold text-gray-900 mb-2">
+										<h2 className="text-2xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-2">
 											{selectedReservation.name}
 										</h2>
-										<p className="text-gray-600 text-sm mb-4">
-											Reserve your table
+										<p className="text-gray-500 text-base md:text-lg font-medium">
+											Reserve your experience
 										</p>
 									</div>
-									<button
-										onClick={closeModal}
-										className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-										<X className="w-5 h-5 text-gray-500" />
-									</button>
 								</div>
 
-								<form onSubmit={handleSubmit} className="space-y-4">
-									<div className="grid grid-cols-2 gap-4">
-										<div>
-											<label className="block text-sm font-medium text-gray-700 mb-1">
+								<form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+									<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+										<div className="space-y-2">
+											<label className="block text-sm font-semibold text-gray-700">
 												First Name
 											</label>
 											<input
@@ -551,11 +359,11 @@ export const ReservationsPage: React.FC = () => {
 													})
 												}
 												placeholder="Enter your first name"
-												className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+												className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200 bg-white/50 backdrop-blur-sm"
 											/>
 										</div>
-										<div>
-											<label className="block text-sm font-medium text-gray-700 mb-1">
+										<div className="space-y-2">
+											<label className="block text-sm font-semibold text-gray-700">
 												Last Name
 											</label>
 											<input
@@ -569,14 +377,14 @@ export const ReservationsPage: React.FC = () => {
 													})
 												}
 												placeholder="Enter your last name"
-												className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+												className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200 bg-white/50 backdrop-blur-sm"
 											/>
 										</div>
 									</div>
 
-									<div className="grid grid-cols-2 gap-4">
-										<div>
-											<label className="block text-sm font-medium text-gray-700 mb-1">
+									<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+										<div className="space-y-2">
+											<label className="block text-sm font-semibold text-gray-700">
 												Email
 											</label>
 											<input
@@ -590,11 +398,11 @@ export const ReservationsPage: React.FC = () => {
 													})
 												}
 												placeholder="your.email@example.com"
-												className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+												className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200 bg-white/50 backdrop-blur-sm"
 											/>
 										</div>
-										<div>
-											<label className="block text-sm font-medium text-gray-700 mb-1">
+										<div className="space-y-2">
+											<label className="block text-sm font-semibold text-gray-700">
 												Phone
 											</label>
 											<input
@@ -608,14 +416,14 @@ export const ReservationsPage: React.FC = () => {
 													})
 												}
 												placeholder="+1 (555) 123-4567"
-												className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+												className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200 bg-white/50 backdrop-blur-sm"
 											/>
 										</div>
 									</div>
 
-									<div className="grid grid-cols-3 gap-4">
-										<div>
-											<label className="block text-sm font-medium text-gray-700 mb-1">
+									<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+										<div className="space-y-2">
+											<label className="block text-sm font-semibold text-gray-700">
 												Date
 											</label>
 											<input
@@ -629,12 +437,12 @@ export const ReservationsPage: React.FC = () => {
 													})
 												}
 												min={new Date().toISOString().split("T")[0]}
-												className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+												className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200 bg-white/50 backdrop-blur-sm"
 												placeholder="mm/dd/yyyy"
 											/>
 										</div>
-										<div>
-											<label className="block text-sm font-medium text-gray-700 mb-1">
+										<div className="space-y-2">
+											<label className="block text-sm font-semibold text-gray-700">
 												Time
 											</label>
 											<select
@@ -646,7 +454,7 @@ export const ReservationsPage: React.FC = () => {
 														time: e.target.value,
 													})
 												}
-												className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+												className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200 bg-white/50 backdrop-blur-sm">
 												<option value="">Select time</option>
 												{selectedReservation.availableTimes.map(
 													(time, index) => (
@@ -657,8 +465,8 @@ export const ReservationsPage: React.FC = () => {
 												)}
 											</select>
 										</div>
-										<div>
-											<label className="block text-sm font-medium text-gray-700 mb-1">
+										<div className="space-y-2">
+											<label className="block text-sm font-semibold text-gray-700">
 												Guests
 											</label>
 											<select
@@ -670,7 +478,7 @@ export const ReservationsPage: React.FC = () => {
 														guests: e.target.value,
 													})
 												}
-												className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+												className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200 bg-white/50 backdrop-blur-sm">
 												{Array.from(
 													{
 														length:
@@ -688,8 +496,8 @@ export const ReservationsPage: React.FC = () => {
 										</div>
 									</div>
 
-									<div>
-										<label className="block text-sm font-medium text-gray-700 mb-1">
+									<div className="space-y-2">
+										<label className="block text-sm font-semibold text-gray-700">
 											Special Requests (Optional)
 										</label>
 										<textarea
@@ -701,85 +509,95 @@ export const ReservationsPage: React.FC = () => {
 												})
 											}
 											placeholder="Any dietary restrictions, special occasions, or seating preferences..."
-											rows={3}
-											className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none"
+											rows={4}
+											className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none transition-all duration-200 bg-white/50 backdrop-blur-sm"
 										/>
 									</div>
 
 									<button
 										type="submit"
-										className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors mt-6">
+										className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl mt-6 md:mt-8 mb-4">
 										Confirm Reservation
 									</button>
 								</form>
 							</div>
 
 							{/* Right side - Image & Info */}
-							<div className="lg:col-span-2 relative bg-gray-50">
+							<div className="relative bg-gradient-to-br from-gray-900 to-gray-800 overflow-hidden">
+								{/* Close button - top right corner */}
+								<button
+									onClick={closeModal}
+									className="absolute top-6 right-6 z-20 p-3 bg-white/20 backdrop-blur-md rounded-full transition-all duration-200 hover:bg-white/30 hover:scale-110 border border-white/30">
+									<X className="w-6 h-6 text-white" />
+								</button>
+
 								<img
 									src={selectedReservation.image}
 									alt={selectedReservation.name}
 									className="w-full h-full object-cover"
 								/>
-								<div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+								<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
 								{/* Rating and Price overlay */}
-								<div className="absolute top-4 right-4 flex items-center space-x-2">
-									<div className="bg-white bg-opacity-90 backdrop-blur-sm rounded-lg px-3 py-1 flex items-center space-x-1">
-										<Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-										<span className="text-sm font-medium text-gray-900">
+								<div className="absolute top-6 right-20 flex items-center space-x-3">
+									<div className="bg-white/95 backdrop-blur-md rounded-2xl px-4 py-2 flex items-center space-x-2 shadow-lg">
+										<Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+										<span className="text-lg font-bold text-gray-900">
 											{selectedReservation.rating}
 										</span>
 									</div>
-									<div className="bg-white bg-opacity-90 backdrop-blur-sm rounded-lg px-3 py-1">
-										<span className="text-sm font-bold text-gray-900">
+									<div className="bg-white/95 backdrop-blur-md rounded-2xl px-4 py-2 shadow-lg">
+										<span className="text-lg font-bold text-gray-900">
 											{selectedReservation.priceRange}
 										</span>
 									</div>
 								</div>
 
 								{/* Bottom info overlay */}
-								<div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
-									<p className="text-sm opacity-90 mb-2">
+								<div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-4 sm:p-6 md:p-8 text-white">
+									<h3 className="text-xl sm:text-2xl font-bold mb-2 md:mb-3">
 										{selectedReservation.location}
-									</p>
-									<p className="text-sm opacity-75 mb-4 leading-relaxed">
+									</h3>
+									<p className="text-base sm:text-lg opacity-90 mb-4 md:mb-6 leading-relaxed">
 										{selectedReservation.description}
 									</p>
 
-									<div className="mb-4">
-										<h4 className="text-sm font-semibold mb-2">Features</h4>
-										<div className="flex flex-wrap gap-2">
+									<div className="mb-4 md:mb-6">
+										<h4 className="text-base sm:text-lg font-semibold mb-2 md:mb-3">
+											Features
+										</h4>
+										<div className="flex flex-wrap gap-2 md:gap-3">
 											{selectedReservation.features
 												.slice(0, 4)
 												.map((feature, index) => (
 													<span
 														key={index}
-														className="text-xs bg-white bg-opacity-20 backdrop-blur-sm px-2 py-1 rounded-full">
+														className="text-xs sm:text-sm bg-white/20 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/30">
 														{feature}
 													</span>
 												))}
 										</div>
 									</div>
 
-									<div className="flex items-center justify-between text-sm">
-										<div className="flex items-center space-x-1">
-											<MapPin className="w-4 h-4" />
-											<span className="opacity-90">
+									<div className="grid grid-cols-1 gap-3 text-sm mb-4">
+										<div className="flex items-center space-x-3">
+											<MapPin className="w-5 h-5 text-blue-300" />
+											<span className="opacity-90 font-medium">
 												Midtown Arts District
 											</span>
 										</div>
-										<div className="flex items-center space-x-1">
-											<Phone className="w-4 h-4" />
-											<span className="opacity-90">+1 (555) 345-6789</span>
+										<div className="flex items-center space-x-3">
+											<Phone className="w-5 h-5 text-blue-300" />
+											<span className="opacity-90 font-medium">
+												+1 (555) 345-6789
+											</span>
 										</div>
-									</div>
-
-									<div className="flex items-center space-x-1 mt-2">
-										<Mail className="w-4 h-4" />
-										<span className="opacity-90 text-sm">
-											{selectedReservation.email}
-										</span>
+										<div className="flex items-center space-x-3">
+											<Mail className="w-5 h-5 text-blue-300" />
+											<span className="opacity-90 font-medium">
+												{selectedReservation.email}
+											</span>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -787,7 +605,7 @@ export const ReservationsPage: React.FC = () => {
 					</div>
 				</div>
 			)}
-		</div>
+		</GuestPageTemplate>
 	);
 };
 
