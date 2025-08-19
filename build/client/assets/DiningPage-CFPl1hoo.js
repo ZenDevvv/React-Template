@@ -1,1 +1,0 @@
-import{w as n}from"./with-props-BUZBlRyP.js";import{l as i}from"./chunk-KNED5TY2-DxLHhDWh.js";import{N as s}from"./NavigationMenu-BSNztIo_.js";import"./icon-button-D3WrrEDa.js";const e=()=>i.jsxs("div",{className:"min-h-screen bg-gray-100 p-8",children:[i.jsx("h1",{className:"text-4xl font-bold mb-4",children:"Dining Services"}),i.jsx(s,{})]}),m=n(e);export{m as default};

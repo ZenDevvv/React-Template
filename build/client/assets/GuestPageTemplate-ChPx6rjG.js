@@ -1,0 +1,1 @@
+import{l as s}from"./chunk-KNED5TY2-DtGqyQJO.js";const r=({children:e,className:t=""})=>s.jsx("div",{className:`min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 ${t}`,children:e});export{r as G};
