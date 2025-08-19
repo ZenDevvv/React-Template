@@ -6,7 +6,15 @@ interface TuyaIRCommandParams {
 	key: string;
 }
 
-const BASE_URL = "/api/dms";
+// Use relative base and let Vite dev proxy forward to the deployed API to avoid CORS in dev
+// Environment-driven base URL.
+// - Dev: defaults to Vite proxy path to avoid CORS
+// - Prod: defaults to Heroku API if VITE_API_BASE isn't provided by the host
+const BASE_URL =
+	import.meta.env.VITE_API_BASE ||
+	(import.meta.env.MODE === "production"
+		? "https://onebis-dms-api-dev-cf341f72994f.herokuapp.com/api/dms"
+		: "/api/dms");
 export const DEVICE_IDS = {
 	AC: {
 		deviceId: "eb9f194920a4ae4b877qs9",

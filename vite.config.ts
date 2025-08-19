@@ -16,7 +16,7 @@ export default defineConfig({
 		port: 8080,
 		proxy: {
 			"/api": {
-				target: "http://localhost:3000",
+				target: "https://onebis-dms-api-dev-cf341f72994f.herokuapp.com",
 				changeOrigin: true,
 				secure: false,
 			},

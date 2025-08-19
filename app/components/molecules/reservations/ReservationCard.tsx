@@ -41,7 +41,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
 				<CardHeader className="p-0 mb-3">
 					<div className="flex items-start justify-between">
 						<CardTitle className="text-xl text-slate-900">{reservation.name}</CardTitle>
-						<span className="text-lg font-bold text-emerald-600">
+						<span className="text-lg font-bold text-blue-600">
 							{reservation.priceRange}
 						</span>
 					</div>
@@ -96,7 +96,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
 						{reservation.availableTimes.slice(0, 4).map((time, index) => (
 							<span
 								key={index}
-								className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs rounded-full border border-emerald-200">
+								className="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full border border-blue-200">
 								{time}
 							</span>
 						))}
@@ -110,7 +110,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
 
 				<button
 					onClick={() => onReserve(reservation)}
-					className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-2xl font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 transform active:scale-95 mt-auto">
+					className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-2xl font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 transform active:scale-95 mt-auto">
 					<Calendar className="w-4 h-4" />
 					<span>Reserve Now</span>
 				</button>

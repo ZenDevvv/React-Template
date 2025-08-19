@@ -21,7 +21,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, total }) => {
 				<span>Total</span>
 				<span>${total.toFixed(2)}</span>
 			</div>
-			<button className="w-full mt-4 h-12 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium">
+			<button className="w-full mt-4 h-12 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium">
 				Proceed to Checkout
 			</button>
 			<div className="flex gap-2 mt-2">
@@ -36,7 +36,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, total }) => {
 				</a>
 				<a
 					href="/dining"
-					className="flex-1 h-11 rounded-lg bg-white border text-emerald-700 inline-grid place-items-center hover:bg-emerald-50 transition-colors">
+					className="flex-1 h-11 rounded-lg bg-white border text-blue-700 inline-grid place-items-center hover:bg-blue-50 transition-colors">
 					<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
 							strokeLinecap="round"

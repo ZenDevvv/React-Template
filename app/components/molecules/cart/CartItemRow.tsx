@@ -47,7 +47,7 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, onAdd, onSub, onRemove 
 							</span>
 							<button
 								onClick={() => onAdd(item.id)}
-								className="w-11 h-11 grid place-items-center bg-emerald-600 hover:bg-emerald-700 text-white transition-colors">
+								className="w-11 h-11 grid place-items-center bg-blue-600 hover:bg-blue-700 text-white transition-colors">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 24 24"

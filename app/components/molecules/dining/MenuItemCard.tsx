@@ -43,7 +43,7 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({
 				<CardHeader className="p-0 mb-3">
 					<div className="flex items-start justify-between">
 						<CardTitle className="text-xl text-slate-900">{item.name}</CardTitle>
-						<span className="text-2xl font-bold text-emerald-600">${item.price}</span>
+						<span className="text-2xl font-bold text-blue-600">${item.price}</span>
 					</div>
 				</CardHeader>
 
@@ -77,14 +77,14 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({
 								<Plus className="w-4 h-4" />
 							</button>
 						</div>
-						<span className="font-bold text-emerald-600">
+						<span className="font-bold text-blue-600">
 							${(item.price * cartQuantity).toFixed(2)}
 						</span>
 					</div>
 				) : (
 					<button
 						onClick={() => onAddToCart(item.id)}
-						className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-2xl font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 transform active:scale-95 mt-auto">
+						className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-2xl font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 transform active:scale-95 mt-auto">
 						<Plus className="w-4 h-4" />
 						<span>Add to Cart</span>
 					</button>

@@ -57,7 +57,7 @@ export const ReservationsOrganism: React.FC<ReservationsOrganismProps> = ({
 							onClick={() => onCategoryChange(category.id)}
 							className={`w-full px-6 py-4 mb-2 rounded-2xl text-left transition-all duration-300 hover:bg-slate-50 hover:scale-105 ${
 								selectedCategory === category.id
-									? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+									? "border border-blue-600 text-blue-600 bg-blue-50"
 									: "text-slate-700 hover:text-slate-900"
 							}`}>
 							<span className="font-medium text-base">{category.name}</span>

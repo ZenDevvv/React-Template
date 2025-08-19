@@ -62,7 +62,7 @@ export const DiningOrganism: React.FC<DiningOrganismProps> = ({
 							onClick={() => onCategoryChange(category.id)}
 							className={`w-full px-6 py-4 mb-2 rounded-2xl text-left transition-all duration-300 hover:bg-slate-50 hover:scale-105 ${
 								selectedCategory === category.id
-									? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+									? "border border-blue-600 text-blue-600 bg-blue-50"
 									: "text-slate-700 hover:text-slate-900"
 							}`}>
 							<span className="font-medium text-base whitespace-nowrap">
@@ -103,7 +103,7 @@ export const DiningOrganism: React.FC<DiningOrganismProps> = ({
 						<a
 							href="/order-status"
 							className="bg-white rounded-2xl p-4 border border-slate-200 hover:bg-slate-50 transition-all duration-300 relative group">
-							<Clock className="w-6 h-6 text-slate-700 group-hover:text-emerald-600 transition-colors" />
+							<Clock className="w-6 h-6 text-slate-700 group-hover:text-blue-600 transition-colors" />
 							{/* Tooltip */}
 							<div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-slate-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
 								Order Status
@@ -116,7 +116,7 @@ export const DiningOrganism: React.FC<DiningOrganismProps> = ({
 							href="/cart"
 							className="bg-white rounded-2xl p-4 border border-slate-200 hover:bg-slate-50 transition-all duration-300 relative group">
 							<div className="relative">
-								<ShoppingBag className="w-6 h-6 text-slate-700 group-hover:text-emerald-600 transition-colors" />
+								<ShoppingBag className="w-6 h-6 text-slate-700 group-hover:text-blue-600 transition-colors" />
 								{totalItems > 0 && (
 									<span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
 										{totalItems}
