@@ -9,6 +9,17 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./app"),
+			app: path.resolve(__dirname, "./app"),
+		},
+	},
+	server: {
+		port: 8080,
+		proxy: {
+			"/api": {
+				target: "https://onebis-dms-api-dev-cf341f72994f.herokuapp.com",
+				changeOrigin: true,
+				secure: false,
+			},
 		},
 	},
 });
